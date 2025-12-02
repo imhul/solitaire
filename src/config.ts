@@ -13,13 +13,7 @@ export const frames = {
     spade: 26,
 }
 
-export const stackPlaceXPos = [400, 460, 520, 580]
-export const stackPlaceYPos = 20
-export const playPlaceXPos = [200, 260, 320, 380, 440, 500, 560]
-export const playPlaceYPos = 150
-export const drawCardXPos = 20
-export const drawCardYPos = 20
-export const cardPlaceXPos = 20
-export const cardPlaceYPos = 150
-export const discardStackXPos = drawCardXPos + 100
-export const discardStackYPos = 20
+export const topYPos = 20
+export const middleYPos = 250
+export const baseStackPlaces = [200, 260, 320, 380]
+export const playPlaces = [20, 80, 140, 200, 260, 320, 380]

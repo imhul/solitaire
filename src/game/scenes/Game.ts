@@ -1,19 +1,21 @@
 import { Scene } from 'phaser'
 // config
 import {
+    topYPos,
     cardScale,
     backFrame,
     cardWidth,
     cardHeight,
-    drawCardXPos,
-    drawCardYPos,
-    discardStackXPos,
-    discardStackYPos,
+    middleYPos,
+    playPlaces,
+    baseStackPlaces,
 } from '../../config'
 
 export class Game extends Scene {
     #drawCardStack: Phaser.GameObjects.Image[]
     #discardStack: Phaser.GameObjects.Image[]
+    #baseStack: Phaser.GameObjects.Image[]
+    #playingStack: Phaser.GameObjects.Container[]
 
     constructor() {
         super('Game')
@@ -21,7 +23,6 @@ export class Game extends Scene {
 
     preload() {
         this.load.setPath('assets')
-
         this.load.spritesheet('cards', 'cards.png', {
             frameWidth: cardWidth,
             frameHeight: cardHeight,
@@ -31,13 +32,16 @@ export class Game extends Scene {
     create(): void {
         this.#createDrawStack()
         this.#createDiscardStack()
+        this.#createBaseBoard()
+        this.#createPlayingBoard()
     }
 
     #createDiscardStack(): void {
-        this.#drawCardBox(discardStackXPos, discardStackYPos)
+        const discardStackXPos = topYPos + 100
+        this.#drawCardBox(discardStackXPos, topYPos)
         this.#discardStack = []
-        const bottomCard = this.#createCard(discardStackXPos, discardStackYPos).setVisible(false)
-        const topCard = this.#createCard(discardStackXPos, discardStackYPos).setVisible(false)
+        const bottomCard = this.#createCard(discardStackXPos, topYPos).setVisible(false)
+        const topCard = this.#createCard(discardStackXPos, topYPos).setVisible(false)
         this.#discardStack.push(bottomCard, topCard)
     }
 
@@ -49,13 +53,22 @@ export class Game extends Scene {
     }
 
     #createDrawStack(): void {
-        this.#drawCardBox(drawCardXPos, drawCardYPos)
+        this.#drawCardBox(topYPos, topYPos)
         this.#drawCardStack = []
         for (let i = 0; i < 3; i++) {
             this.#drawCardStack.push(
-                this.#createCard(drawCardXPos + i * 5, drawCardYPos)
+                this.#createCard(topYPos + i * 5, topYPos)
             )
         }
+    }
+
+    #createBaseBoard(): void {
+        this.#baseStack = []
+        baseStackPlaces.forEach((xPos) => {
+            this.#drawCardBox(xPos, topYPos)
+            const card = this.#createCard(xPos, topYPos).setVisible(false)
+            this.#baseStack.push(card)
+        })
     }
 
     #drawCardBox(x: number, y: number): void {
@@ -70,5 +83,18 @@ export class Game extends Scene {
             )
             .setOrigin(0)
             .setStrokeStyle(2, 0xffffff, 0.4)
+    }
+
+    #createPlayingBoard(): void {
+        this.#playingStack = []
+        playPlaces.forEach((xPos, i) => {
+            this.#drawCardBox(xPos, middleYPos)
+            const container = this.add.container(xPos, middleYPos)
+            this.#playingStack.push(container)
+            for (let j = 0; j < i + 1; j++) {
+                const card = this.#createCard(0, j * 20)
+                container.add(card)
+            }
+        })
     }
 }

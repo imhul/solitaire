@@ -1,6 +1,6 @@
 {
     "name": "solitaire",
-    "description": "A Phaser solitaire game using Vite and TypeScript.",
+    "description": "A Solitaire game using phaser.js, Vite and TypeScript.",
     "version": "0.0.1",
     "author": {
         "name": "Tkachuk Zakhar",
